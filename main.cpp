@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <fstream>
 #include <cstring>
+#include "login.h"
 
 using namespace std;
 string PASS;
@@ -39,7 +40,7 @@ public:
 
 int main()
 {
-    if (password())
+    if (login())
     {
         output(2);
         int choice;
@@ -226,36 +227,36 @@ void editpassword()
         exit(0);
     }
 }
-bool password()
-{
-    ifstream Pass;
-    Pass.open("Password.txt");
-    Pass >> PASS;
-    Pass.close();
+// bool password()
+// {
+//     ifstream Pass;
+//     Pass.open("Password.txt");
+//     Pass >> PASS;
+//     Pass.close();
 
-    int choice;
-    output(1);
-    cin >> choice;
-    if (choice == 1)
-    {
-        cout << "Enter Password :";
-        string tempPass;
-        cin >> tempPass;
-        if (tempPass == PASS)
-        {
-            return true;
-        }
-        else
-        {
-            cout << "Wrong Password!";
-            return false;
-        }
-    }
-    else if (choice == 2)
-    {
-        editpassword();
-    }
-}
+//     int choice;
+//     output(1);
+//     cin >> choice;
+//     if (choice == 1)
+//     {
+//         cout << "Enter Password :";
+//         string tempPass;
+//         cin >> tempPass;
+//         if (tempPass == PASS)
+//         {
+//             return true;
+//         }
+//         else
+//         {
+//             cout << "Wrong Password!";
+//             return false;
+//         }
+//     }
+//     else if (choice == 2)
+//     {
+//         editpassword();
+//     }
+// }
 string time()
 {
     time_t tt;
