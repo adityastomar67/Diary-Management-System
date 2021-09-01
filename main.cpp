@@ -9,21 +9,15 @@
 
     Author - Aditya Singh Tomar
 */
-#include <iostream>
-#include <iomanip>
-#include <ctime>
-#include <stdlib.h>
-#include <fstream>
-#include <cstring>
 #include "login.h"
 
-using namespace std;
+// using namespace std;
 string PASS;
 
 void output(int);
 void editpassword();
 bool password();
-string time();
+// string time();
 
 class record
 {
@@ -40,36 +34,37 @@ public:
 
 int main()
 {
-    if (login())
-    {
-        output(2);
-        int choice;
-        cin >> choice;
-        record file;
-        string t = time();
-        switch (choice)
-        {
-        case 1:
-            file.addrecord(t);
-            break;
-        case 2:
-            file.viewrecord();
-            break;
-        case 3:
-            file.editrecord();
-            break;
-        case 4:
-            file.deleterecord();
-            break;
-        case 5:
-            editpassword();
-            break;
-        case 6:
-            exit(0);
-            break;
-        }
-        return 0;
-    }
+    // if (login())
+    // {
+    //     output(2);
+    //     int choice;
+    //     cin >> choice;
+    //     record file;
+    //     string t = time();
+    //     switch (choice)
+    //     {
+    //     case 1:
+    //         file.addrecord(t);
+    //         break;
+    //     case 2:
+    //         file.viewrecord();
+    //         break;
+    //     case 3:
+    //         file.editrecord();
+    //         break;
+    //     case 4:
+    //         file.deleterecord();
+    //         break;
+    //     case 5:
+    //         editpassword();
+    //         break;
+    //     case 6:
+    //         exit(0);
+    //         break;
+    //     }
+    //     return 0;
+    // }
+    reg();
 }
 
 void record::addrecord(string time)
@@ -257,11 +252,3 @@ void editpassword()
 //         editpassword();
 //     }
 // }
-string time()
-{
-    time_t tt;
-    struct tm *ti;
-    time(&tt);
-    ti = localtime(&tt);
-    return asctime(ti);
-}

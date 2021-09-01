@@ -1,6 +1,9 @@
 #include <iostream>
-#include <cstring>
+#include <iomanip>
+#include <ctime>
+#include <stdlib.h>
 #include <fstream>
+#include <cstring>
 
 using namespace std;
 
@@ -9,7 +12,6 @@ bool is_file_exist(string fileName)
     std::ifstream infile(fileName);
     return infile.good();
 }
-
 bool login()
 {
     string id, pass;
@@ -30,12 +32,11 @@ bool login()
     }
     if (content == pass)
     {
-        cout << "Success";
+        // cout << "Success";
         return true;
     }
 }
-
-string reg()
+void reg()
 {
     string id, pass;
     cout << "Enter your Username :";
@@ -44,13 +45,15 @@ string reg()
     cin >> pass;
 
     ofstream file;
-    file.open("database/" + id + ".txt");
+    file.open("database/" + id + "/__PASS.txt");
     file << pass;
     file.close();
 }
-
-// int main()
-// {
-//     login("new", "pass");
-//     reg();
-// }
+string time()
+{
+    time_t tt;
+    struct tm *ti;
+    time(&tt);
+    ti = localtime(&tt);
+    return asctime(ti);
+}
