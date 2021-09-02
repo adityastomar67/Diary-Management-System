@@ -20,7 +20,7 @@ class record
     string note;
 
 public:
-    void addrecord(string);
+    void addrecord();
     void viewrecord();
     void editrecord();
     void deleterecord();
@@ -130,7 +130,7 @@ void editpassword()
         file.close();
     }
 }
-void choices(string t)
+void choices()
 {
     time();
     int choice;
@@ -140,7 +140,7 @@ void choices(string t)
     switch (choice)
     {
     case 1:
-        file.addrecord(t);
+        file.addrecord();
         break;
     case 2:
         file.viewrecord();
@@ -160,8 +160,10 @@ void choices(string t)
     }
 }
 
-void record::addrecord(string time)
+void record::addrecord()
 {
+    bool paraChange = false;
+
     system("cls");
 
     ofstream file;
@@ -171,19 +173,33 @@ void record::addrecord(string time)
     getline(cin, title);
 
     file.open("database/" + id + "/" + title + ".txt");
-
-    file << time;
+    // cout << time << endl;
+    file << t;
     file << endl;
 
-    cout << "Enter the note (When done type \"-END-\"" << endl;
+    cout << "Enter the note \n==>To stop typing -  \":END\"\n==>To put a para change - \":PC\"\n==>To put a new line\":N\"" << endl;
     while (true)
     {
         note = "";
-        cin >> note;
-        if (note == "-END-")
+        getline(cin, note);
+        if (note == ":END")
             break;
+        else if (note == ":PC")
+        {
+            note = "\n\t";
+            paraChange = true;
+        }
+        else if (note == ":N")
+        {
+            note = "\n"
+        }
+
         file << note;
-        file << endl;
+        if (!paraChange)
+        {
+            file << endl;
+            paraChange = false;
+        }
     }
 
     file.close();
@@ -191,13 +207,13 @@ void record::addrecord(string time)
 void record::viewrecord()
 {
     system("cls");
-    string titleString;
+    string title;
     string content;
     ifstream file;
     cout << "Enter the Title :";
-    cin >> titleString;
+    cin >> title;
     cout << endl;
-    file.open("database/" + id + "/" + titleString + ".txt");
+    file.open("database/" + id + "/" + title + ".txt");
 
     system("cls");
     while (!file.eof())
@@ -209,28 +225,56 @@ void record::viewrecord()
     cout << "\n\nPress 1 for Main Menu\n";
     cin >> content;
     if (content == "1")
-        choices(t);
+        choices();
 }
 void record::editrecord()
 {
-    system("clear");
-    string titleString;
-    string content;
-    string content2;
-    string extension = ".txt";
-    fstream file;
+    bool paraChange = false;
+    system("cls");
+    string title, content, content2;
+    ifstream file;
 
     cout << "Enter the Title :";
-    cin >> titleString;
-    titleString = titleString + extension;
-    cout << endl;
-    file.open(titleString, ios::app);
+    cin >> title;
+    if (is_file_exist("database/" + id + "/" + title + ".txt"))
+    {
+        file.open("database/" + id + "/" + title + ".txt", ios::app);
+        system("cls");
+        while (!file.eof())
+        {
+            getline(file, content);
+            cout << content;
+            cout << endl;
+        }
 
-    cout << "Enter the note" << endl;
-    cin.ignore();
-    getline(cin, content2);
-    file << content2;
-    file.close();
+        file.close();
+        ofstream file;
+        file.open("database/" + id + "/" + title + ".txt", ios::app);
+
+        // file.open(titleString + ".txt");
+
+        cout << endl;
+        cout << "Enter the note \n==>To stop typing -  \"-END-\"\n==>To put a para change - \"-PC-\"" << endl;
+        while (true)
+        {
+            note = "";
+            getline(cin, note);
+            if (note == "-END-")
+                break;
+            else if (note == "-PC-")
+            {
+                note = "\n\t";
+                paraChange = true;
+            }
+            file << note;
+            if (!paraChange)
+            {
+                file << endl;
+                paraChange = false;
+            }
+        }
+        file.close();
+    }
 }
 void record::deleterecord()
 {

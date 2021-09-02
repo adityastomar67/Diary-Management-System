@@ -20,7 +20,7 @@ int main()
     {
     case 1:
         if (login())
-            choices(t);
+            choices();
         break;
     case 2:
         reg();
