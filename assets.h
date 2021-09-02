@@ -94,7 +94,6 @@ bool login()
 }
 void reg()
 {
-    // string id, pass;
     cout << "Enter your Username :";
     cin >> id;
     cout << "Enter your Password :";
@@ -192,7 +191,6 @@ void record::addrecord(string time)
 void record::viewrecord()
 {
     system("cls");
-    // int choice;
     string titleString;
     string content;
     ifstream file;
@@ -227,19 +225,6 @@ void record::editrecord()
     titleString = titleString + extension;
     cout << endl;
     file.open(titleString, ios::app);
-
-    // system("clear");
-    // while (!file.eof())
-    // {
-    //     getline(file, content);
-    //     cout << content;
-    //     cout << endl;
-    // }
-
-    // file.close();
-    // ofstream file;
-
-    // file.open(titleString + ".txt");
 
     cout << "Enter the note" << endl;
     cin.ignore();
