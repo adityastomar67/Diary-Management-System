@@ -116,6 +116,21 @@ void time()
     ti = localtime(&tt);
     t = asctime(ti);
 }
+void editpassword()
+{
+    string currentPass;
+    cout << "Enter Current Password: ";
+    cin >> currentPass;
+    if (currentPass == pass)
+    {
+        ofstream file;
+        file.open("database/" + id + "/__PASS.txt", std::ofstream::out | std::ofstream::trunc);
+        cout << "Enter New Password: ";
+        cin >> currentPass;
+        file << currentPass;
+        file.close();
+    }
+}
 void choices(string t)
 {
     time();
@@ -138,7 +153,7 @@ void choices(string t)
         file.deleterecord();
         break;
     case 5:
-        // editpassword();
+        editpassword();
         break;
     case 6:
         exit(0);
@@ -234,7 +249,7 @@ void record::editrecord()
 }
 void record::deleterecord()
 {
-    char file[10];
+    char file[100];
     char ext[] = {'.', 't', 'x', 't', '\0'};
     cout << "Enter file name :";
     cin >> file;
