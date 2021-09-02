@@ -8,6 +8,7 @@
 // #include <sys/stat.h>
 // #include <sys/types.h>
 #include <direct.h>
+// #include <stdio.h>
 
 using namespace std;
 
@@ -126,15 +127,23 @@ void record::addrecord(string time)
     cin.ignore();
     getline(cin, title);
 
-    // title = time + " -- " + title;
-
-    file.open("database/" + id + "/" + time + ".txt");
+    file.open("database/" + id + "/" + title + ".txt");
 
     file << time;
     file << endl;
-    cout << "Enter the note" << endl;
-    getline(cin, note);
-    file << note;
+
+    cout << "Enter the note (When done type \"-END-\"" << endl;
+    while (true)
+    {
+        note = "";
+        // getline(cin, note);
+        // cin.ignore();
+        cin >> note;
+        if (note == "-END-")
+            break;
+        file << note;
+        file << endl;
+    }
 
     file.close();
 }
