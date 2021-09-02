@@ -12,7 +12,7 @@
 
 using namespace std;
 
-string id, pass;
+string id, pass, t;
 
 class record
 {
@@ -108,13 +108,42 @@ void reg()
     file << pass;
     file.close();
 }
-string time()
+void time()
 {
     time_t tt;
     struct tm *ti;
     time(&tt);
     ti = localtime(&tt);
-    return asctime(ti);
+    t = asctime(ti);
+}
+void choices(string t)
+{
+    time();
+    int choice;
+    output(2);
+    cin >> choice;
+    record file;
+    switch (choice)
+    {
+    case 1:
+        file.addrecord(t);
+        break;
+    case 2:
+        file.viewrecord();
+        break;
+    case 3:
+        file.editrecord();
+        break;
+    case 4:
+        file.deleterecord();
+        break;
+    case 5:
+        // editpassword();
+        break;
+    case 6:
+        exit(0);
+        break;
+    }
 }
 
 void record::addrecord(string time)
@@ -136,8 +165,6 @@ void record::addrecord(string time)
     while (true)
     {
         note = "";
-        // getline(cin, note);
-        // cin.ignore();
         cin >> note;
         if (note == "-END-")
             break;
@@ -166,6 +193,10 @@ void record::viewrecord()
         cout << content;
         cout << endl;
     }
+    cout << "\n\nPress 1 for Main Menu\n";
+    cin >> content;
+    if (content == "1")
+        choices(t);
 }
 void record::editrecord()
 {
