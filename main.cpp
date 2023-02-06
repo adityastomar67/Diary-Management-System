@@ -1,4 +1,4 @@
-/* 
+/*
     This projects contains the following functions:
         password()      � contains/manages/handles password protection
         addrecord()     � to add new diary record
@@ -20,10 +20,16 @@ int main()
     {
     case 1:
         if (login())
-            choices(t);
+            choices();
         break;
     case 2:
         reg();
+        main();
+    case 3:
+        exit(0);
+        break;
+    default:
+        cout << "Invalid Choice"<< endl;
         main();
     }
     return 0;

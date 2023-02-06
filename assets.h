@@ -4,40 +4,65 @@
 #include <stdlib.h>
 #include <fstream>
 #include <cstring>
+#include <cstdlib>
 // #include <bits/stdc++.h>
 // #include <sys/stat.h>
 // #include <sys/types.h>
-#include <direct.h>
+/* #include <direct.h> */
 // #include <stdio.h>
 
 using namespace std;
+string ID, PASS, TIME;
 
-string id, pass, t;
+void create_directory(string dirname){
+    #ifdef WINDOWS
+        string command = "mkdir " + dirname;
+        system(command.c_str());
+    #else
+        // Assume POSIX
+        string command = "mkdir -p " + dirname;
+        system(command.c_str());
+    #endif
+}
+void clear_screen()
+{
+    #ifdef WINDOWS
+        std::system("cls");
+    #else
+        // Assume POSIX
+        std::system ("clear");
+    #endif
+}
+bool is_file_exist(string fileName)
+{
+    ifstream infile(fileName);
+    return infile.good();
+}
 
 class record
 {
     string title;
     string note;
 
-public:
-    void addrecord(string);
-    void viewrecord();
-    void editrecord();
-    void deleterecord();
+    public:
+        void addrecord();
+        void viewrecord();
+        void editrecord();
+        void deleterecord();
 };
 
-void output(int choice)
-{
+void output(int choice){
     switch (choice)
     {
     case 1:
-        system("cls");
+        clear_screen();
         cout << setw(119) << "**********************************************************" << endl
              << setw(119) << "*                                                        *" << endl
              << setw(119) << "*                                                        *" << endl
              << setw(119) << "*                                                        *" << endl
-             << setw(119) << "*                    [1]LOGIN                            *" << endl
-             << setw(119) << "*                    [2]REGISTER                         *" << endl
+             << setw(119) << "*                    [1] LOGIN                           *" << endl
+             << setw(119) << "*                    [2] REGISTER                        *" << endl
+             << setw(119) << "*                    [3] EXIT                            *" << endl
              << setw(119) << "*                                                        *" << endl
              << setw(119) << "*                                                        *" << endl
              << setw(119) << "*                                                        *" << endl
@@ -47,12 +72,9 @@ void output(int choice)
              << setw(98) << "Enter Your Choice :";
         break;
     case 2:
-        system("cls");
-        cout << setw(99) << "WELCOME TO YOUR PERSONAL DIARY" << endl
-             << setw(98) << endl
-             << setw(98) << endl
-             << setw(97) << "What would you like to do?" << endl
-             << setw(98) << endl
+        clear_screen();
+        cout << setw(99) << "WELCOME TO YOUR PERSONAL DIARY" << endl << setw(98) << endl << setw(98) << endl
+             << setw(97) << "What would you like to do?" << endl << setw(98) << endl
              << setw(98) << "Add Record               [1]" << endl
              << setw(98) << "View Record              [2]" << endl
              << setw(98) << "Edit Record              [3]" << endl
@@ -62,86 +84,79 @@ void output(int choice)
         break;
     }
 }
-bool is_file_exist(string fileName)
-{
-    std::ifstream infile(fileName);
-    return infile.good();
-}
-bool login()
-{
-    // string id, pass;
-    bool check = false;
+bool login() {
+    string userPass;
     cout << "Enter your Username :";
-    cin >> id;
-    cout << "Enter your Password :";
-    cin >> pass;
-    string content;
-    if (is_file_exist("database/" + id + "/__PASS.txt"))
-    {
+    cin >> ID;
+    if (is_file_exist("database/" + ID + "/__PASS.txt")) {
+        cout << "Enter your Password :";
+        cin >> PASS;
         ifstream file;
-        file.open("database/" + id + "/__PASS.txt");
-        getline(file, content);
-        if (content == pass)
-            check = true;
+        file.open("database/" + ID + "/__PASS.txt");
+        getline(file, userPass);
+        if (userPass == PASS)
+            return true;
         else
-            check = false;
+            cout << "Wrong Pass!";
+            return false;
     }
-    else
-    {
-        check = false;
+    else {
+        cout << "User doesn't exists!";
+        return false;
     }
-    return check;
 }
-void reg()
-{
-    // string id, pass;
+void reg() {
     cout << "Enter your Username :";
-    cin >> id;
-    cout << "Enter your Password :";
-    cin >> pass;
-
-    ofstream file;
-    const char *c = ("database/" + id).c_str();
-    mkdir(c);
-
-    file.open("database/" + id + "/__PASS.txt");
-    file << pass;
-    file.close();
+    cin >> ID;
+    if (!is_file_exist("database/" + ID + "/__PASS.txt")) {
+        create_directory("database/" + ID);
+        cout << "Enter your Password :";
+        cin >> PASS;
+        ofstream file;
+        file.open("database/" + ID + "/__PASS.txt");
+        file << PASS;
+        file.close();
+    }
+    else{
+        cout << "Username already exists" << endl;
+        reg();
+    }
 }
-void time()
-{
+void time() {
     time_t tt;
     struct tm *ti;
     time(&tt);
     ti = localtime(&tt);
-    t = asctime(ti);
+    TIME = asctime(ti);
 }
-void editpassword()
-{
-    string currentPass;
+void editpassword() {
+    clear_screen();
+    string curPass;
     cout << "Enter Current Password: ";
-    cin >> currentPass;
-    if (currentPass == pass)
+    cin >> curPass;
+    if (curPass == PASS)
     {
         ofstream file;
-        file.open("database/" + id + "/__PASS.txt", std::ofstream::out | std::ofstream::trunc);
+        file.open("database/" + ID + "/__PASS.txt", std::ofstream::out | std::ofstream::trunc);
         cout << "Enter New Password: ";
-        cin >> currentPass;
-        file << currentPass;
+        cin >> curPass;
+        file << curPass;
         file.close();
+        cout << "Password Changed Successfully!" << endl;
+    }
+    else {
+        cout << "Wrong Password Given!" << endl;
     }
 }
-void choices(string t)
-{
+void choices() {
     time();
     int choice;
     output(2);
     cin >> choice;
     record file;
-    switch (choice)
-    {
+    switch (choice) {
     case 1:
-        file.addrecord(t);
+        file.addrecord();
         break;
     case 2:
         file.viewrecord();
@@ -158,27 +173,25 @@ void choices(string t)
     case 6:
         exit(0);
         break;
+    default:
+        cout << "Invalid Choice"<<endl;
+        choices();
+        break;
     }
 }
 
-void record::addrecord(string time)
-{
-    system("cls");
-
+void record::addrecord(){
+    clear_screen();
     ofstream file;
-
     cout << "Enter the title" << endl;
     cin.ignore();
     getline(cin, title);
-
-    file.open("database/" + id + "/" + title + ".txt");
-
-    file << time;
+    file.open("database/" + ID + "/" + title + ".txt");
+    file << TIME;
     file << endl;
+    cout << "Enter the note (When done typing, type \"-END-\" at the end." << endl;
 
-    cout << "Enter the note (When done type \"-END-\"" << endl;
-    while (true)
-    {
+    while (true){
         note = "";
         cin >> note;
         if (note == "-END-")
@@ -186,22 +199,18 @@ void record::addrecord(string time)
         file << note;
         file << endl;
     }
-
     file.close();
 }
-void record::viewrecord()
-{
-    system("cls");
-    // int choice;
-    string titleString;
-    string content;
+void record::viewrecord(){
+    clear_screen();
+    string titleString, content;
     ifstream file;
     cout << "Enter the Title :";
     cin >> titleString;
     cout << endl;
-    file.open("database/" + id + "/" + titleString + ".txt");
+    file.open("database/" + ID + "/" + titleString + ".txt");
 
-    system("cls");
+    clear_screen();
     while (!file.eof())
     {
         getline(file, content);
@@ -211,15 +220,12 @@ void record::viewrecord()
     cout << "\n\nPress 1 for Main Menu\n";
     cin >> content;
     if (content == "1")
-        choices(t);
+        choices();
 }
 void record::editrecord()
 {
-    system("clear");
-    string titleString;
-    string content;
-    string content2;
-    string extension = ".txt";
+    clear_screen();
+    string titleString, content, content2, extension = ".txt";
     fstream file;
 
     cout << "Enter the Title :";
